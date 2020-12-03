@@ -34,17 +34,11 @@ const TrackCreateScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <Text h2>Create Track</Text>
       <Map />
       {err ? (
         <Text style={styles.errorText}>Please enable location services</Text>
       ) : null}
-      <TrackForm
-        startRecording={startRecording}
-        stopRecording={stopRecording}
-        recording={recording}
-        locations={locations}
-      />
+      <TrackForm />
       <Text h3>{locations.length}</Text>
     </SafeAreaView>
   );

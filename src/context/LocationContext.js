@@ -1,5 +1,4 @@
 import createDataContext from "./createDataContext";
-import trackerApi from "../api/tracker";
 
 const locationReducer = (state, action) => {
   switch (action.type) {
@@ -15,6 +14,12 @@ const locationReducer = (state, action) => {
     case "add_location": {
       return { ...state, locations: [...state.locations, action.payload] };
     }
+    case "change_name": {
+      return { ...state, name: action.payload };
+    }
+    case "reset": {
+      return { ...state, name: "", locations: [] };
+    }
     default:
       return state;
   }
@@ -26,27 +31,30 @@ const startRecording = (dispatch) => () => {
 
 const stopRecording = (dispatch) => async (name, locations) => {
   dispatch({ type: "stop_recording" });
-  // save track name through api
-  if (locations.length) {
-    const responst = await trackerApi.post("/tracks", { name, locations });
-    console.log(response);
-  }
 };
 
 const addLocation = (dispatch) => (location, recording) => {
-  // console.log("add location");
   dispatch({ type: "add_current_location", payload: location });
   if (recording) {
     dispatch({ type: "add_location", payload: location });
   }
 };
 
+const changeName = (dispatch) => (name) => {
+  dispatch({ type: "change_name", payload: name });
+};
+
+const reset = (dispatch) => () => {
+  dispatch({ type: "reset" });
+};
+
 export const { Context, Provider } = createDataContext(
   locationReducer,
-  { startRecording, stopRecording, addLocation },
+  { startRecording, stopRecording, addLocation, changeName, reset },
   {
     currentLocation: null,
     locations: [],
     recording: false,
+    name: "",
   }
 );

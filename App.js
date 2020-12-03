@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, HeaderTitle } from "@react-navigation/stack";
 import AccountScreen from "./src/screens/AccountScreen";
 import SigninScreen from "./src/screens/SigninScreen";
 import SignupScreen from "./src/screens/SignupScreen";
@@ -14,13 +14,14 @@ import {
   Context as AuthContext,
 } from "./src/context/AuthContext";
 import { Provider as LocationProvider } from "./src/context/LocationContext";
+import { Provider as TrackProvider } from "./src/context/TrackContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TrackStack = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator>
       <Stack.Screen name="TrackList" component={TrackListScreen} />
       <Stack.Screen name="TrackDetails" component={TrackDetailScreen} />
     </Stack.Navigator>
@@ -33,20 +34,15 @@ const App = () => {
     localSign();
   }, []);
 
-  // console.log(`isLoading: ${state.isLoading}`);
-
   if (state.isLoading) {
     return <ActivityIndicator size="large" style={{ marginTop: 200 }} />;
   }
-  // console.log(`isLoading: ${state.isLoading}`);
+
   return (
     <NavigationContainer>
       {state.token != null ? (
         <>
-          <Tab.Navigator
-            initialRouteName="Create"
-            // tabBarOptions={{ style: { height: 100 } }}
-          >
+          <Tab.Navigator initialRouteName="Tracks">
             <Tab.Screen name="Tracks" component={TrackStack} />
             <Tab.Screen name="Create" component={TrackCreateScreen} />
             <Tab.Screen name="Account" component={AccountScreen} />
@@ -69,10 +65,12 @@ const styles = StyleSheet.create({});
 
 export default () => {
   return (
-    <LocationProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </LocationProvider>
+    <TrackProvider>
+      <LocationProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LocationProvider>
+    </TrackProvider>
   );
 };

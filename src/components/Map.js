@@ -5,16 +5,7 @@ import MapView, { Polyline, Circle } from "react-native-maps";
 import { Context as LocationContext } from "../context/LocationContext";
 
 const Map = () => {
-  // let points = [];
-  // for (let i = 0; i < 20; i++) {
-  //   points.push({
-  //     latitude: 32.0853 + i * 0.02,
-  //     longitude: 34.781769 + i * 0.05,
-  //   });
-  // }
   const { state } = useContext(LocationContext);
-
-  console.log(state);
 
   if (!state.currentLocation) {
     console.log("current was null");
